@@ -101,11 +101,12 @@ battery = dict(
     discharge_char='⏦',
     update_delay=5,
     foreground='7070ff',
-    low_forgeground='ff0000'
+    low_forgeground='ff0000',
+    **widget_defaults,
 )
 
 battery_widget = widget.Battery(**battery)
-bat_icon = battery.copy()
+#bat_icon = battery.copy()
 #TODO
 #path = '/home/blastmaster/.config/qtile/theme/'
 #myicons = {
@@ -137,7 +138,8 @@ cpu_graph = widget.CPUGraph(
     margin_y=1,
     border_width=1,
     graph_color='ff2020',
-    fill_color='c01010'
+    fill_color='c01010',
+    **widget_defaults,
 )
 
 # Memory widget
@@ -156,6 +158,7 @@ memory_graph = widget.MemoryGraph(
     type='box',
     border_width=1,
     graph_color='ff2020',
+    **widget_defaults,
 )
 
 # Net-Graph widget
@@ -171,17 +174,18 @@ net_graph = widget.NetGraph(
     interface='wlan0',
     graph_color='22ff44',
     fill_color='11aa11',
+    **widget_defaults,
 )
 
 
 def separator(sep='|'):
-    return libqtile.widget.TextBox(sep, foreground='7070ff')
+    return libqtile.widget.TextBox(sep, foreground='7070ff', **widget_defaults)
 
 
 top_widgets = [
-    widget.GroupBox(rounded=False, borderwidth=2),
+    widget.GroupBox(rounded=False, borderwidth=2, **widget_defaults),
     widget.Prompt(),
-    widget.TaskList(fontsize=11, rounded=False),
+    widget.TaskList(rounded=False, **widget_defaults),
     widget.Systray(),
     separator(sep='Net: '),
     net_graph,
@@ -204,7 +208,8 @@ bottom_widgets = [
     widget.CurrentLayout(foreground='7070ff'),
     widget.Sep(foreground='7070ff'),
     widget.Clock(foreground='7070ff',
-        format='%Y-%m-%d %a %I:%M %p'),
+        format='%Y-%m-%d %a %I:%M %p',
+        **widget_defaults),
 ]
 
 # Screens
