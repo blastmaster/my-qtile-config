@@ -1,6 +1,7 @@
 from libqtile.config import Key, Screen, Group, Drag, Click
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
+from libqtile.dgroups import simple_key_binder
 import libqtile
 
 # Some constants
@@ -257,7 +258,7 @@ mouse = [
     Click([MOD], 'Button2', lazy.window.bring_to_front())
 ]
 
-dgroups_key_binder = None
+dgroups_key_binder = simple_key_binder(MOD)
 dgroups_app_rules = []
 main = None
 follow_mouse_focus = True
