@@ -5,66 +5,92 @@ import libqtile
 
 # Some constants
 
-mod = 'mod4'
-alt = 'mod1'
-terminal = 'roxterm'
-group_names = [str(i) for i in range(1, 10)]
+MOD = 'mod4'
+TERMINAL = 'roxterm'
+GROUP_NAMES = [str(i) for i in range(1, 10)]
 
 
 keys = [
-    # navigate through application
-    Key([mod], 'k', lazy.layout.up()),
-    Key([mod], 'j', lazy.layout.down()),
-    Key([mod], "h", lazy.layout.left()),
-    Key([mod], "l", lazy.layout.right()),
 
-    # shuffle applications
-    Key([mod, 'shift'], 'k', lazy.layout.shuffle_up()),
-    Key([mod, 'shift'], 'j', lazy.layout.shuffle_down()),
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), lazy.layout.swap_left()),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), lazy.layout.swap_right()),
+    # navigate through windows
+    Key([MOD], 'k', lazy.layout.up(),
+        dict(desc='set focus on window above')),
+    Key([MOD], 'j', lazy.layout.down(),
+        dict(desc='set focus on window below')),
+    Key([MOD], "h", lazy.layout.left(),
+        dict(desc='set focus on window left')),
+    Key([MOD], "l", lazy.layout.right(),
+        dict(desc='set focus on window right')),
 
-    # manipulate size of application windows
-    Key([mod, 'control'], 'j', lazy.layout.grow(), lazy.layout.grow_down()),
-    Key([mod, 'control'], 'k', lazy.layout.shrink(), lazy.layout.grow_up()),
-    Key([mod, "control"], "h", lazy.layout.grow_left()),
-    Key([mod, "control"], "l", lazy.layout.grow_right()),
+    # shuffle windows
+    Key([MOD, 'shift'], 'k', lazy.layout.shuffle_up(),
+        dict(desc='shuffle window up')),
+    Key([MOD, 'shift'], 'j', lazy.layout.shuffle_down(),
+        dict(desc='shuffle window down')),
+    Key([MOD, "shift"], "h", lazy.layout.shuffle_left(), lazy.layout.swap_left(),
+        dict(desc='shuffle window left')),
+    Key([MOD, "shift"], "l", lazy.layout.shuffle_right(), lazy.layout.swap_right(),
+        dict(desc='shuffle window right')),
 
-    Key([mod], 'f', lazy.window.toggle_fullscreen()),
-    Key([mod, 'control'], 'space', lazy.window.toggle_floating()),
+    # manipulate size of windows
+    Key([MOD, 'control'], 'j', lazy.layout.grow(), lazy.layout.grow_down(),
+        dict(desc='increase size of current window')),
+    Key([MOD, 'control'], 'k', lazy.layout.shrink(), lazy.layout.grow_up(),
+        dict(desc='decrease size of current window')),
+    Key([MOD, "control"], "h", lazy.layout.grow_left(),
+        dict(desc='increase window size to left')),
+    Key([MOD, "control"], "l", lazy.layout.grow_right(),
+        dict(desc='increase window size to right')),
 
-    Key([mod], 'm', lazy.layout.maximize()),
-    Key([mod], 'n', lazy.layout.normalize()),
-
-    Key([mod, 'shift'], 'Return', lazy.layout.toggle_split()),
-    Key([mod, 'control'], 'Return', lazy.layout.rotate()),
+    # misc layout modifications
+    Key([MOD], 'f', lazy.window.toggle_fullscreen(),
+        dict(desc='toggle fullscreen')),
+    Key([MOD, 'control'], 'space', lazy.window.toggle_floating(),
+        dict(desc='toggle floating')),
+    Key([MOD], 'm', lazy.layout.maximize(),
+        dict(desc='maximize current window')),
+    Key([MOD], 'n', lazy.layout.normalize(),
+        dict(desc='normalize current window')),
+    Key([MOD, 'shift'], 'Return', lazy.layout.toggle_split(),
+        dict(desc='toggle split')),
+    Key([MOD, 'control'], 'Return', lazy.layout.rotate(),
+        dict(desc='rotate layout')),
 
     # control
-    Key([mod], 'r', lazy.spawncmd()),
-    Key([mod], 'space', lazy.next_layout()),
-    Key([mod, 'shift'], 'space', lazy.prev_layout()),
+    Key([MOD], 'r', lazy.spawncmd(),
+        dict(desc='run an application')),
+    Key([MOD], 'space', lazy.next_layout(),
+        dict(desc='switch to next layout')),
+    Key([MOD, 'shift'], 'space', lazy.prev_layout(),
+        dict(desc='switch to previous layout')),
+    Key([MOD, 'shift'], 'c', lazy.window.kill(),
+        dict(desc='kill window')),
+    Key([MOD, 'control'], 'r', lazy.restart(),
+        dict(desc='restart qtile')),
+    Key([MOD, 'control'], 'q', lazy.shutdown(),
+        dict(desc='quit qtile')),
+    Key([MOD], 'Return', lazy.spawn(TERMINAL),
+        dict(desc='start a terminal')),
 
-    Key([mod, 'shift'], 'c', lazy.window.kill()),
-    Key([mod, 'control'], 'r', lazy.restart()),
-    Key([mod, 'control'], 'q', lazy.shutdown()),
-    Key([mod], 'Return', lazy.spawn(terminal)),
-
-    # Group bindings
-    Key([mod], 'Left', lazy.group.prevgroup()),
-    Key([mod], 'Right', lazy.group.nextgroup()),
-    Key([mod], 'Escape', lazy.screen.togglegroup())
+    # group bindings
+    Key([MOD], 'Left', lazy.screen.prev_group(),
+        dict(desc='switch to group left')),
+    Key([MOD], 'Right', lazy.screen.next_group(),
+        dict(desc='switch to group right')),
+    Key([MOD], 'Escape', lazy.screen.togglegroup(),
+        dict(desc='toggle group'))
 
 ]
 
 # Groups
 
-groups = [Group(g) for g in group_names]
+groups = [Group(g) for g in GROUP_NAMES]
 
 for gr in groups:
     # keybinding to move to group
-    keys.append(Key([mod], gr.name, lazy.group[gr.name].toscreen()))
+    keys.append(Key([MOD], gr.name, lazy.group[gr.name].toscreen()))
     # keybinding to move window to certain group
-    keys.append(Key([mod, 'shift'], gr.name, lazy.window.togroup(gr.name)))
+    keys.append(Key([MOD, 'shift'], gr.name, lazy.window.togroup(gr.name)))
 
 
 # Layouts
@@ -224,11 +250,11 @@ screens = [
 # Drag floating layouts.
 
 mouse = [
-    Drag([mod], 'Button1', lazy.window.set_position_floating(),
+    Drag([MOD], 'Button1', lazy.window.set_position_floating(),
         start=lazy.window.get_position()),
-    Drag([mod], 'Button3', lazy.window.set_size_floating(),
+    Drag([MOD], 'Button3', lazy.window.set_size_floating(),
         start=lazy.window.get_size()),
-    Click([mod], 'Button2', lazy.window.bring_to_front())
+    Click([MOD], 'Button2', lazy.window.bring_to_front())
 ]
 
 dgroups_key_binder = None
