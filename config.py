@@ -96,13 +96,19 @@ for gr in groups:
 
 # Layouts
 
+borders = dict(
+        border_focus='77b753',
+        border_normal='000000',
+        border_width=1,
+)
+
 layouts = [
-    layout.MonadTall(),
-    layout.Columns(),
-    layout.Wmii(),
-    layout.Stack(num_stack=2),
-    layout.Floating(),
-    layout.Max(),
+    layout.MonadTall(**borders),
+    layout.Columns(**borders),
+    layout.Wmii(**borders),
+    layout.Stack(num_stack=2, **borders),
+    layout.Floating(**borders),
+    layout.Max(**borders),
 ]
 
 # Widgets
